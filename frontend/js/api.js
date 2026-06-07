@@ -1,14 +1,22 @@
 // api.js — the single data-access layer. Every screen reads through these,
 // so the same metric returns the same value everywhere. Read-only SELECT/WITH.
 
-async function q(sql, params = []) {
-  const r = await fetch("/api/warehouse/query", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sql, params }),
-  });
-  if (!r.ok) throw new Error("query failed: " + (await r.text()));
-  return r.json();
+async function q(sql, params = [], tries = 2) {
+  for (let i = 0; i < tries; i++) {
+    const r = await fetch("/api/warehouse/query", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sql, params }),
+    });
+    if (r.ok) return r.json();
+    const msg = await r.text();
+    // Render free tier: instance asleep (x-render-routing: no-server) — retry once.
+    if (i < tries - 1 && (r.status === 404 || r.status === 503)) {
+      await new Promise((ok) => setTimeout(ok, 2500));
+      continue;
+    }
+    throw new Error("query failed: " + msg);
+  }
 }
 
 async function loadPatients() {

@@ -2,16 +2,21 @@
 
 async function renderPatients(el){
   el.innerHTML=`<div class="loading">Loading patients\u2026</div>`;
-  const rows=await Promise.all(PATIENTS.map(async p=>{
-    const [dx, lastEnc] = await Promise.all([
-      q(`SELECT c.display nm FROM gold_fact_condition f
+  // One query for the whole directory (avoids 50+ POSTs that overwhelm Render free tier).
+  const extra=await q(`SELECT p.patient_key pk,
+      (SELECT c.display FROM gold_fact_condition f
          JOIN gold_dim_code c ON c.code_key=f.condition_code_key
-         WHERE f.patient_key=? AND f.is_active=1 ORDER BY f.onset_date_key LIMIT 1`,[p.patient_key]),
-      q(`SELECT MAX(d.full_date) dt FROM gold_fact_encounter f
-         JOIN gold_dim_date d ON d.date_key=f.admit_date_key WHERE f.patient_key=?`,[p.patient_key]),
-    ]);
-    return {p, dx:dx[0]&&dx[0].nm, last:lastEnc[0]&&lastEnc[0].dt};
-  }));
+         WHERE f.patient_key=p.patient_key AND f.is_active=1
+         ORDER BY f.onset_date_key LIMIT 1) dx,
+      (SELECT MAX(d.full_date) FROM gold_fact_encounter f
+         JOIN gold_dim_date d ON d.date_key=f.admit_date_key
+         WHERE f.patient_key=p.patient_key) last_visit
+     FROM gold_dim_patient p WHERE p.is_current=1`);
+  const byPk=Object.fromEntries(extra.map(r=>[r.pk,r]));
+  const rows=PATIENTS.map(p=>{
+    const x=byPk[p.patient_key]||{};
+    return {p, dx:x.dx, last:x.last_visit};
+  });
 
   el.innerHTML=`
     <div class="card ptable-wrap">
