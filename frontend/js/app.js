@@ -91,6 +91,16 @@ async function refreshPatientBanner(){
   if(APP_MODE!=="patient"||!CURRENT_PK){ box.innerHTML=""; return; }
   box.innerHTML=`<div class="loading" style="padding:16px">Loading patient\u2026</div>`;
   box.innerHTML=await patientBannerHTML();
+  const toggle=box.querySelector(".pb-details-toggle");
+  const panel=box.querySelector(".pb-row2-collapsible");
+  if(toggle&&panel){
+    toggle.onclick=()=>{
+      const open=panel.classList.toggle("open");
+      toggle.classList.toggle("open",open);
+      toggle.setAttribute("aria-expanded",open?"true":"false");
+      toggle.textContent=open?"Hide details \u25B4":"Patient details \u25BE";
+    };
+  }
 }
 
 function buildPatientSwitcher(){

@@ -117,14 +117,16 @@ async function patientBannerHTML(){
           <span class="pbadge">Primary Dx: <b>${esc(dx?cleanCode(dx.nm):"Not recorded")}</b></span>
           ${cpActive?`<span class="pbadge pbadge-ok">Care Plan: Active</span>`:`<span class="pbadge pbadge-muted">Care Plan: None active</span>`}
         </div>
+        <div class="pbanner-mobline">${p.age_years??DASH} yrs \u00B7 ${esc(p.gender||DASH)} \u00B7 Last visit ${lastDt?fmtDate(lastDt):DASH}</div>
       </div>
-      <div class="pb-actions">
+      <div class="pb-actions pb-desk-only">
         <button class="btn btn-pri-sm" disabled title="Coming soon">\u270E Generate Note</button>
         <button class="btn btn-ghost" disabled title="Coming soon">\u2197 Share Record</button>
       </div>
-      <div class="p360-score">${healthScoreGaugeHTML()}</div>
+      <div class="p360-score pb-desk-only">${healthScoreGaugeHTML()}</div>
     </div>
-    <div class="pb-row2">
+    <button type="button" class="pb-details-toggle" aria-expanded="false">Patient details \u25BE</button>
+    <div class="pb-row2 pb-row2-collapsible">
       <div class="pb-panel">
         <div class="pb-panel-h">Demographics &amp; Social</div>
         <div class="pb-facts">
