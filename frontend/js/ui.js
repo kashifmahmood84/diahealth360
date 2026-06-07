@@ -289,11 +289,11 @@ function tableHTML(headers, rows, opts={}){
   const align = opts.align||[];
   const head = headers.map((h,i)=>`<th${align[i]?` style="text-align:${align[i]}"`:""}>${esc(h)}</th>`).join("");
   if(!rows.length){
-    return `<table><thead><tr>${head}</tr></thead><tbody>
-      <tr><td colspan="${headers.length}" class="empty">${esc(opts.empty||"No records")}</td></tr></tbody></table>`;
+    return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>
+      <tr><td colspan="${headers.length}" class="empty">${esc(opts.empty||"No records")}</td></tr></tbody></table></div>`;
   }
   const body = rows.map(r=>`<tr>${r.map((c,i)=>`<td${align[i]?` style="text-align:${align[i]}"`:""}>${c}</td>`).join("")}</tr>`).join("");
-  return `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
 // ---- status pill ----

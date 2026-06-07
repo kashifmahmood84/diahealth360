@@ -513,26 +513,43 @@ h3{display:flex;align-items:center}
 
 /* ============ Mobile / tablet ============ */
 @media(max-width:768px){
-  body{font-size:14px;-webkit-text-size-adjust:100%}
-  .app,.app.mode-patient{display:flex;flex-direction:column;min-height:100dvh}
-  .workspace{flex:1;min-height:0;padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
-  .main{padding:12px 14px 28px}
+  html,body{overflow-x:hidden;width:100%;max-width:100vw;-webkit-text-size-adjust:100%}
+  body{font-size:14px;padding:0;margin:0}
+  .app,.app.mode-patient{
+    display:flex!important;flex-direction:column!important;
+    grid-template-columns:unset!important;
+    width:100%;max-width:100vw;min-height:100vh;min-height:100dvh;
+    overflow-x:hidden
+  }
+  .workspace{
+    order:1;flex:1 1 auto;width:100%;max-width:100%;min-width:0;min-height:0;
+    overflow-x:hidden;padding-bottom:0
+  }
+  html.mode-patient-doc .workspace{padding-bottom:0}
+  html:not(.mode-patient-doc) .workspace{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  .main{padding:12px 14px 20px;overflow-x:hidden;max-width:100%}
 
-  /* Bottom navigation instead of left sidebar / icon rail */
-  .portal-side:not([hidden]),.icon-rail:not([hidden]){
-    order:2;position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;width:100%;
+  /* Portal mode: bottom nav. Patient mode: hidden (tabs + Portal button instead). */
+  .portal-side:not([hidden]){
+    order:2;position:fixed!important;left:0;right:0;bottom:0;top:auto!important;
+    height:auto!important;min-height:0!important;width:100%!important;max-width:100vw;
     flex-direction:row;align-items:stretch;justify-content:flex-start;
     padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));gap:4px;
     z-index:80;border-right:none;border-top:1px solid rgba(255,255,255,.1);
     overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none
   }
-  .portal-side:not([hidden])::-webkit-scrollbar,.icon-rail:not([hidden])::-webkit-scrollbar{display:none}
+  .icon-rail{display:none!important}
+  .portal-side:not([hidden])::-webkit-scrollbar{display:none}
   .portal-side .brand,.portal-side .sidefoot{display:none}
-  .icon-rail .rail-exit{display:flex;margin-bottom:0;flex:none}
-  .portal-side .nav,.rail-nav{flex-direction:row;flex:1;padding:0;gap:4px;align-items:center}
-  .portal-side .nav a,.rail-btn{flex:none;min-width:44px;min-height:44px;padding:8px 12px;font-size:11px;white-space:nowrap}
-  .portal-side .nav a .ic,.rail-btn{font-size:16px}
-  .rail-btn{width:auto;min-width:44px;padding:8px 14px}
+  .portal-side .nav{flex-direction:row;flex:1;padding:0;gap:4px;align-items:center;overflow-x:auto}
+  .portal-side .nav a{flex:none;min-width:44px;min-height:44px;padding:8px 12px;font-size:11px;white-space:nowrap;display:inline-flex;align-items:center}
+  .portal-side .nav a .ic{font-size:16px}
+
+  .mob-portal-btn{
+    flex:none;align-self:center;font-size:11px;font-weight:700;padding:8px 12px;min-height:44px;
+    border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--teal-d);cursor:pointer;
+    margin-right:6px;white-space:nowrap
+  }
 
   /* Portal top bar */
   .portal-top{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
@@ -541,22 +558,27 @@ h3{display:flex;align-items:center}
   .search-wrap{min-width:0;width:100%;flex:1}
 
   /* Patient banner + workspace tabs */
-  .patient-chrome{position:sticky;top:0}
-  .pb-row1{flex-direction:column;padding:12px 14px 10px;gap:10px}
-  .pb-row2{flex-direction:column}
-  .pb-panel{padding:10px 14px;min-width:0}
-  .pb-identity{min-width:0;width:100%}
-  .pbanner-name{font-size:20px}
-  .pbanner-meta{font-size:11px}
-  .pb-actions{width:100%;justify-content:flex-start}
-  .pb-facts{grid-template-columns:repeat(2,1fr)}
-  .pnav{flex-direction:column;align-items:stretch;padding:0 10px 8px;gap:8px}
-  .pnav-tabs{width:100%;padding-bottom:2px}
-  .pnav-tab,.pnav-btn{padding:10px 12px;font-size:12px;min-height:44px}
+  .patient-chrome{position:sticky;top:0;max-width:100vw;overflow:hidden}
+  .pbanner-pro{max-width:100%;overflow:hidden}
+  .pb-row1{flex-direction:column;padding:12px 14px 10px;gap:10px;align-items:stretch}
+  .pb-row2{flex-direction:column;max-height:42vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .pb-panel{padding:10px 14px;min-width:0!important;max-width:100%}
+  .pb-identity{min-width:0!important;width:100%;max-width:100%}
+  .pbanner-name{font-size:18px;line-height:1.2;word-break:break-word;overflow-wrap:anywhere}
+  .pbanner-meta{font-size:11px;flex-direction:column;align-items:flex-start;gap:2px}
+  .pbanner-meta .dotsep{display:none}
+  .pbanner-badges{flex-direction:column;align-items:flex-start}
+  .pb-actions{width:100%;flex-direction:column;gap:6px}
+  .pb-actions .btn,.pb-actions .btn-pri-sm,.pb-actions .btn-ghost{width:100%}
+  .p360-score{margin:0 auto;width:100%;max-width:120px}
+  .pb-facts{grid-template-columns:1fr 1fr;gap:6px 10px}
+  .pnav{flex-direction:column;align-items:stretch;padding:0 8px 8px;gap:6px;max-width:100%}
+  .pnav-tabs{display:flex;align-items:center;width:100%;padding-bottom:2px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pnav-tab,.pnav-btn{padding:10px 12px;font-size:12px;min-height:44px;flex:none}
   .pnav-meta{width:100%;padding:0 0 4px}
-  .pswitch{max-width:none;width:100%;min-height:44px}
-  .pdrop{left:0;right:0;min-width:0;width:max(100%,240px)}
-  .pdrop-grid{min-width:0;grid-template-columns:1fr}
+  .pswitch{max-width:none;width:100%;min-height:44px;font-size:14px}
+  .pdrop{position:fixed;left:8px;right:8px;width:auto;min-width:0;max-width:calc(100vw - 16px)}
+  .pdrop-grid{min-width:0!important;grid-template-columns:1fr!important;width:100%}
 
   /* Grids → single column */
   .kpirow,.kpirow-5,.mstrip,.compstrip,.cols,.cols3,.cols4,.cols-360,
@@ -569,8 +591,10 @@ h3{display:flex;align-items:center}
   .memcard{grid-template-columns:1fr;text-align:left}
 
   /* Tables scroll horizontally */
-  .ptable-wrap,.card:has(table),.cmtable{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .pro-table,.card table{min-width:520px}
+  .table-scroll,.ptable-wrap,.cmtable{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .ptable-wrap{overflow-x:auto!important}
+  .pro-table,.table-scroll table,.card table{min-width:480px}
+  table{max-width:none}
   .ptable-toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:12px 14px}
   .ptable-toolbar .search-wrap{max-width:none}
 
@@ -591,9 +615,16 @@ h3{display:flex;align-items:center}
   .p360-utilbar{grid-template-columns:1fr 1fr auto}
   .clin-strip{gap:6px 10px}
 
-  /* Charts & modals */
+  /* Charts & modals — force fit viewport */
+  svg.chart,svg.donut,.donut{max-width:100%!important;height:auto!important}
+  svg.spark{max-width:100%!important;height:30px!important}
+  .chartblock,.tgcell,.p360-vital,.p360-panel,.card{max-width:100%;min-width:0}
+  .trendgrid,.trendgrid.big{gap:10px;width:100%}
+  .tgcell{overflow:hidden}
   .chartblock .charttools{opacity:1}
   .trailbtn,.zoombtn{min-width:32px;min-height:32px}
+  .trail-tip{max-width:min(280px,calc(100vw - 24px))}
+  .info .tip{max-width:min(280px,calc(100vw - 24px))}
   .cmwin{top:0;left:0;right:0;bottom:0;transform:none;width:100%;max-width:none;
     max-height:100dvh;border-radius:0;padding:14px 12px calc(12px + env(safe-area-inset-bottom,0px))}
   .cmtools{flex-direction:column;align-items:stretch}
@@ -606,15 +637,20 @@ h3{display:flex;align-items:center}
 }
 
 @media(max-width:480px){
-  .main{padding:10px 12px 24px}
-  .portal-top-title h1{font-size:18px}
+  .main{padding:10px 10px 18px}
+  .portal-top-title h1{font-size:17px}
   .cohort-pill{display:block;margin:6px 0 0;max-width:max-content}
   .pb-facts{grid-template-columns:1fr}
+  .pb-row2{max-height:36vh}
+  .pbanner-name{font-size:16px}
   .p360-jstats{grid-template-columns:1fr!important}
   .mcard .v{font-size:20px}
   .scard .sv{font-size:18px}
   .tgcell .tgtop{flex-wrap:wrap;gap:4px}
-  .pro-table{min-width:480px}
+  .pro-table,.table-scroll table{min-width:360px}
   .pro-table th:nth-child(3),.pro-table td:nth-child(3),
   .pro-table th:nth-child(6),.pro-table td:nth-child(6){display:none}
+  .pnav-tab,.pnav-btn{padding:8px 10px;font-size:11px}
+  .dlegend{flex-direction:column;align-items:flex-start}
+  .donut-wrap{flex-direction:column;align-items:center}
 }

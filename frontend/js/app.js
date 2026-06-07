@@ -3,6 +3,9 @@
 function workspaceEl(){
   return document.getElementById("workspace-main");
 }
+function isMobile(){
+  return window.matchMedia("(max-width:768px)").matches;
+}
 
 const RAIL_NAV = [
   ["exit","Back to Portal","\u2302",true],
@@ -37,7 +40,8 @@ function buildIconRail(){
 function buildPatientTabs(){
   const box=document.getElementById("patient-tabs");
   const activeTab=tabForScreen(CURRENT_SCREEN)||"overview";
-  box.innerHTML=PATIENT_TABS.map(t=>{
+  const mobBack=isMobile()?`<button type="button" class="mob-portal-btn" id="mob-portal-btn" aria-label="Back to portal">\u2302 Portal</button>`:"";
+  box.innerHTML=mobBack+PATIENT_TABS.map(t=>{
     if(t.screen){
       const on=t.id===activeTab&&CURRENT_SCREEN===t.screen;
       return `<a class="pnav-tab ${on?"on":""}" data-screen="${t.screen}">${esc(t.label)}</a>`;
@@ -53,6 +57,8 @@ function buildPatientTabs(){
     </div>`;
   }).join("");
 
+  const mobBtn=box.querySelector("#mob-portal-btn");
+  if(mobBtn) mobBtn.onclick=()=>backToPortal();
   box.querySelectorAll("[data-screen]").forEach(a=>{
     a.onclick=(e)=>{ e.preventDefault(); navigatePatient(a.dataset.screen); closePatientDrops(); };
   });
@@ -65,11 +71,11 @@ function buildPatientTabs(){
       if(!wasOpen) wrap.classList.add("open");
       else if(btn.dataset.default) navigatePatient(btn.dataset.default);
     };
-    if(!window.matchMedia("(max-width:768px)").matches){
+    if(!isMobile()){
       btn.onmouseenter=()=>{ closePatientDrops(); btn.closest(".pnav-drop").classList.add("open"); };
     }
   });
-  if(!window.matchMedia("(max-width:768px)").matches){
+  if(!isMobile()){
     box.querySelectorAll(".pnav-drop").forEach(d=>{
       d.onmouseleave=()=>d.classList.remove("open");
     });
@@ -101,7 +107,9 @@ function updateChrome(){
   root.classList.toggle("mode-patient",inPatient);
   root.classList.toggle("mode-portal",!inPatient);
   document.getElementById("portal-side").hidden=inPatient;
-  document.getElementById("icon-rail").hidden=!inPatient;
+  document.getElementById("icon-rail").hidden=!inPatient||isMobile();
+  document.documentElement.classList.toggle("is-mobile",isMobile());
+  document.documentElement.classList.toggle("mode-patient-doc",inPatient);
   document.getElementById("portal-top").hidden=inPatient;
   document.getElementById("patient-chrome").hidden=!inPatient;
 
@@ -219,4 +227,9 @@ window.addEventListener("unhandledrejection",(e)=>{
   console.error(e.reason);
 });
 
+let _resizeT;
+window.addEventListener("resize",()=>{
+  clearTimeout(_resizeT);
+  _resizeT=setTimeout(()=>{ if(PATIENTS&&PATIENTS.length) updateChrome(); },150);
+});
 boot().catch(e=>showFatal(e.message));
