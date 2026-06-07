@@ -142,9 +142,17 @@ const CARE_GAPS = [
   {key:"bp",    label:"Blood Pressure Monitoring",        months:3,  kind:"lab", match:["8480-6"]},
 ];
 
+// Default clinical workspace on app load (must match warehouse full_name exactly).
+const DEFAULT_BOOT_PATIENT = "Alva958 Kerry175 Franecki195";
+
+function defaultPatientKey(){
+  const hit=PATIENTS.find(p=>p.full_name===DEFAULT_BOOT_PATIENT);
+  return hit?hit.patient_key:(PATIENTS[0]&&PATIENTS[0].patient_key);
+}
+
 let PATIENTS = [];
 let CURRENT_PK = null;
-let APP_MODE = "portal";       // "portal" | "patient"
-let CURRENT_SCREEN = "dashboard";
+let APP_MODE = "patient";       // boot into patient workspace
+let CURRENT_SCREEN = "patient360";
 let SHOW_ALL_PATIENTS = false;
 const SCREENS = {};

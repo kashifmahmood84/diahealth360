@@ -65,11 +65,15 @@ function buildPatientTabs(){
       if(!wasOpen) wrap.classList.add("open");
       else if(btn.dataset.default) navigatePatient(btn.dataset.default);
     };
-    btn.onmouseenter=()=>{ closePatientDrops(); btn.closest(".pnav-drop").classList.add("open"); };
+    if(!window.matchMedia("(max-width:768px)").matches){
+      btn.onmouseenter=()=>{ closePatientDrops(); btn.closest(".pnav-drop").classList.add("open"); };
+    }
   });
-  box.querySelectorAll(".pnav-drop").forEach(d=>{
-    d.onmouseleave=()=>d.classList.remove("open");
-  });
+  if(!window.matchMedia("(max-width:768px)").matches){
+    box.querySelectorAll(".pnav-drop").forEach(d=>{
+      d.onmouseleave=()=>d.classList.remove("open");
+    });
+  }
 }
 
 function closePatientDrops(){
@@ -185,9 +189,7 @@ function renderScreen(screen){
 async function boot(){
   PATIENTS=await loadPatients();
   if(!PATIENTS.length){ workspaceEl().innerHTML='<div class="loading">No patients found.</div>'; return; }
-  CURRENT_PK=PATIENTS[0].patient_key;
-  updateChrome();
-  navigatePortal("dashboard");
+  openPatient(defaultPatientKey(),"patient360");
 }
 
 document.addEventListener("click",(e)=>{

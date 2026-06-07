@@ -510,3 +510,111 @@ h3{display:flex;align-items:center}
   .p360-score{width:100%;margin-left:0}
   .pb-facts-3{grid-template-columns:1fr}
 }
+
+/* ============ Mobile / tablet ============ */
+@media(max-width:768px){
+  body{font-size:14px;-webkit-text-size-adjust:100%}
+  .app,.app.mode-patient{display:flex;flex-direction:column;min-height:100dvh}
+  .workspace{flex:1;min-height:0;padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  .main{padding:12px 14px 28px}
+
+  /* Bottom navigation instead of left sidebar / icon rail */
+  .portal-side:not([hidden]),.icon-rail:not([hidden]){
+    order:2;position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;width:100%;
+    flex-direction:row;align-items:stretch;justify-content:flex-start;
+    padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));gap:4px;
+    z-index:80;border-right:none;border-top:1px solid rgba(255,255,255,.1);
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none
+  }
+  .portal-side:not([hidden])::-webkit-scrollbar,.icon-rail:not([hidden])::-webkit-scrollbar{display:none}
+  .portal-side .brand,.portal-side .sidefoot{display:none}
+  .icon-rail .rail-exit{display:flex;margin-bottom:0;flex:none}
+  .portal-side .nav,.rail-nav{flex-direction:row;flex:1;padding:0;gap:4px;align-items:center}
+  .portal-side .nav a,.rail-btn{flex:none;min-width:44px;min-height:44px;padding:8px 12px;font-size:11px;white-space:nowrap}
+  .portal-side .nav a .ic,.rail-btn{font-size:16px}
+  .rail-btn{width:auto;min-width:44px;padding:8px 14px}
+
+  /* Portal top bar */
+  .portal-top{flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
+  .portal-top-title h1{font-size:20px}
+  .portal-top-actions{width:100%;justify-content:space-between}
+  .search-wrap{min-width:0;width:100%;flex:1}
+
+  /* Patient banner + workspace tabs */
+  .patient-chrome{position:sticky;top:0}
+  .pb-row1{flex-direction:column;padding:12px 14px 10px;gap:10px}
+  .pb-row2{flex-direction:column}
+  .pb-panel{padding:10px 14px;min-width:0}
+  .pb-identity{min-width:0;width:100%}
+  .pbanner-name{font-size:20px}
+  .pbanner-meta{font-size:11px}
+  .pb-actions{width:100%;justify-content:flex-start}
+  .pb-facts{grid-template-columns:repeat(2,1fr)}
+  .pnav{flex-direction:column;align-items:stretch;padding:0 10px 8px;gap:8px}
+  .pnav-tabs{width:100%;padding-bottom:2px}
+  .pnav-tab,.pnav-btn{padding:10px 12px;font-size:12px;min-height:44px}
+  .pnav-meta{width:100%;padding:0 0 4px}
+  .pswitch{max-width:none;width:100%;min-height:44px}
+  .pdrop{left:0;right:0;min-width:0;width:max(100%,240px)}
+  .pdrop-grid{min-width:0;grid-template-columns:1fr}
+
+  /* Grids → single column */
+  .kpirow,.kpirow-5,.mstrip,.compstrip,.cols,.cols3,.cols4,.cols-360,
+  .p360-vitals,.p360-mid,.p360-bottom,.p360-pa,.labgrid,.compbody,.trendgrid,.trendgrid.big{
+    grid-template-columns:1fr!important
+  }
+  .p360-jstats{grid-template-columns:repeat(2,1fr)!important}
+  .hbar,.onrow,.tlrow{grid-template-columns:1fr;gap:4px}
+  .hbar span:first-child,.onrow span:first-child{font-weight:600}
+  .memcard{grid-template-columns:1fr;text-align:left}
+
+  /* Tables scroll horizontally */
+  .ptable-wrap,.card:has(table),.cmtable{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pro-table,.card table{min-width:520px}
+  .ptable-toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:12px 14px}
+  .ptable-toolbar .search-wrap{max-width:none}
+
+  /* Cards & headers */
+  .hdr{flex-direction:column;padding:14px 16px}
+  .hactions{margin-left:0;flex-direction:row;flex-wrap:wrap;width:100%}
+  .hcards{max-width:none;width:100%;justify-content:flex-start}
+  .card{padding:14px 14px;border-radius:14px}
+  .dash-cta{flex-direction:column;padding:16px}
+  .p360-vital{padding:12px 14px}
+  .p360-vital-val{font-size:22px}
+  .p360-vital-head{flex-wrap:wrap}
+  .p360-vital-spark{max-width:100%;min-width:0;flex:1 1 100%}
+  .p360-row{flex-direction:column;align-items:flex-start;gap:4px}
+  .p360-row span:first-child{white-space:normal}
+  .p360-labmeta{flex-direction:column;align-items:flex-start}
+  .p360-labmeta .chartblock{margin-left:0;width:100%}
+  .p360-utilbar{grid-template-columns:1fr 1fr auto}
+  .clin-strip{gap:6px 10px}
+
+  /* Charts & modals */
+  .chartblock .charttools{opacity:1}
+  .trailbtn,.zoombtn{min-width:32px;min-height:32px}
+  .cmwin{top:0;left:0;right:0;bottom:0;transform:none;width:100%;max-width:none;
+    max-height:100dvh;border-radius:0;padding:14px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+  .cmtools{flex-direction:column;align-items:stretch}
+  .cmgroup{flex-wrap:wrap}
+  .rangebtns button{min-height:40px;padding:8px 14px}
+
+  /* Touch-friendly controls */
+  .btn,.btn-pri-sm,.btn-ghost,.top-ico{min-height:44px;min-width:44px}
+  .info{min-width:18px;min-height:18px}
+}
+
+@media(max-width:480px){
+  .main{padding:10px 12px 24px}
+  .portal-top-title h1{font-size:18px}
+  .cohort-pill{display:block;margin:6px 0 0;max-width:max-content}
+  .pb-facts{grid-template-columns:1fr}
+  .p360-jstats{grid-template-columns:1fr!important}
+  .mcard .v{font-size:20px}
+  .scard .sv{font-size:18px}
+  .tgcell .tgtop{flex-wrap:wrap;gap:4px}
+  .pro-table{min-width:480px}
+  .pro-table th:nth-child(3),.pro-table td:nth-child(3),
+  .pro-table th:nth-child(6),.pro-table td:nth-child(6){display:none}
+}
