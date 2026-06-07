@@ -1,0 +1,70 @@
+# DiaHealth 360 — Cursor Project Rules
+
+You are helping build DiaHealth 360, a clinical command center web app for a
+diabetes care cohort, backed by a read-only Synthea FHIR medallion-gold SQLite
+warehouse. Follow these rules on EVERY request.
+
+## Stack (do not change without being asked)
+- Backend: Python 3 + Flask. A small app factory in `backend/`, route blueprints
+  in `backend/routes/`.
+- Frontend: plain HTML + CSS + vanilla JS (no framework, no build step). Scripts
+  load in dependency order via <script> tags.
+- Database: SQLite at `data/diahealth_compact_full.db`. Served read-only.
+- This mirrors a previously-proven prototype — keep it simple, do not introduce
+  React/Vue/bundlers/ORMs unless explicitly asked.
+
+## Environment
+- ALWAYS use `python3` and `pip3`, never bare `python` / `pip`.
+- Use a virtual environment (`venv/`). Activate before running.
+- The app serves the frontend itself; open http://localhost:5000 (or 5050 if 5000
+  is taken — macOS AirPlay uses 5000).
+
+## THE SCHEMA RULE (most important)
+The UI layout is driven by the database SCHEMA, not by one patient's rows.
+- A panel BELONGS if a gold table/column can ever feed it — even when a given
+  patient has zero rows (then show an honest empty state like
+  "No known allergies recorded").
+- NEVER build panels for data that has NO schema at all. These do not exist and
+  must never be fabricated:
+  - CGM / continuous glucose / Time-in-Range / AGP / GMI / glucose variability /
+    glucose heatmap
+  - medication adherence percentages
+  - composite "Health Score" or "Diabetes Control Score" gauges
+  - lifestyle / wearable metrics (steps, sleep, stress, calories, hydration)
+  - hypoglycemia-event counts
+- If asked to build any of the above, refuse and explain there is no data source;
+  offer the schema-backed alternative instead.
+- NEVER invent values, patients, drug names, specialties, or procedures that are
+  not in the database. If unsure whether something exists, query the DB first.
+
+## Data honesty (known dataset facts — state these, don't hide them)
+- Synthetic Synthea data. HbA1c skews low (cohort avg ~4%); do not "correct" it.
+- Provider specialty is uniform ("General Practice Physician"). Do not invent
+  endocrinologists/nephrologists/dietitians.
+- Payer/insurance is a placeholder — show "Not recorded".
+- ~28% of medication rows have codes outside the med reference set (null
+  medication) — handle gracefully.
+- Allergies are sparse (19 records across 25 patients) — empty states are normal.
+- Use `gold_fact_medication` (compat, code-keyed) for medication display queries;
+  `gold_fact_medication_request` / `_admin` are the richer modern tables.
+
+## Database safety
+- Open the warehouse READ-ONLY (sqlite `mode=ro`). Never write to it.
+- Only SELECT / WITH queries against the warehouse. Reject anything else.
+- Resolve dates via `gold_dim_date` (date_key is yyyymmdd). Join codes via
+  `gold_dim_code`. Patient surrogate key is `patient_key`; FHIR id is `patient_id`.
+
+## Working style
+- Build ONE screen at a time, end to end, and verify it loads with real data
+  before moving on. Do not scaffold all 17 screens at once.
+- After a screen works, suggest a git commit.
+- Keep functions small; keep the data layer in one place so the same metric
+  reads the same value on every screen (single source of truth).
+- When given a mock screen image, match its layout, but drop any no-schema panel
+  per THE SCHEMA RULE and replace with a schema-backed panel or honest empty state.
+
+## The 17 navigation screens (one per nav item)
+Overview, Patient 360, Timeline, Trends & Analytics, Labs, Medications,
+Encounters, Procedures, Immunizations, Allergies, Documents, Reports, Devices,
+Care Team, Complications, Care Gaps, Settings.
+See CONTEXT.md for which gold tables back each screen.

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiaHealth 360 — Clinical Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css?v=10">
+</head>
+<body>
+<div class="app" id="app-root">
+  <!-- Portal: full sidebar -->
+  <aside class="portal-side" id="portal-side">
+    <div class="brand">
+      <span class="mk">360</span>
+      <div><b>DiaHealth 360</b><small>CLINICAL COMMAND CENTER</small></div>
+    </div>
+    <nav class="nav" id="portal-nav"></nav>
+    <div class="sidefoot">
+      <div class="sideuser">
+        <span class="sideava">DR</span>
+        <div><b>Clinician</b><small>Last sync &middot; Live</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Patient: collapsed icon rail -->
+  <aside class="icon-rail" id="icon-rail" hidden>
+    <button type="button" class="rail-btn rail-exit" id="rail-exit" title="Back to Portal">&#x2302;</button>
+    <nav class="rail-nav" id="rail-nav"></nav>
+  </aside>
+
+  <div class="workspace">
+    <header class="portal-top" id="portal-top">
+      <div class="portal-top-title" id="portal-title"></div>
+      <div class="portal-top-actions">
+        <div class="search-wrap">
+          <span class="search-ico">&#128269;</span>
+          <input class="portal-search" id="portal-search" placeholder="Search patients, MRN, conditions&#8230;" autocomplete="off">
+        </div>
+        <button class="top-ico" disabled title="Notifications">&#128276;<span class="badge">3</span></button>
+        <button class="top-ico user-ico" disabled title="Account">DR</button>
+      </div>
+    </header>
+
+    <div class="patient-chrome" id="patient-chrome" hidden>
+      <div class="pbanner" id="patient-banner"></div>
+      <nav class="pnav" id="patient-nav">
+        <div class="pnav-tabs" id="patient-tabs"></div>
+        <div class="pnav-meta">
+          <select class="pswitch" id="patient-switch" title="Switch patient"></select>
+        </div>
+      </nav>
+    </div>
+
+    <main class="main" id="workspace-main" role="main">
+      <div class="loading">Starting DiaHealth 360&hellip;</div>
+    </main>
+  </div>
+</div>
+
+<script src="js/state.js?v=10"></script>
+<script src="js/api.js?v=10"></script>
+<script src="js/ui.js?v=10"></script>
+<script src="js/screens/dashboard.js?v=10"></script>
+<script src="js/screens/patients.js?v=10"></script>
+<script src="js/screens/population.js?v=10"></script>
+<script src="js/screens/portal-reports.js?v=10"></script>
+<script src="js/screens/admin.js?v=10"></script>
+<script src="js/screens/patient360.js?v=10"></script>
+<script src="js/screens/timeline.js?v=10"></script>
+<script src="js/screens/trends.js?v=10"></script>
+<script src="js/screens/labs.js?v=10"></script>
+<script src="js/screens/medications.js?v=10"></script>
+<script src="js/screens/encounters.js?v=10"></script>
+<script src="js/screens/procedures.js?v=10"></script>
+<script src="js/screens/immunizations.js?v=10"></script>
+<script src="js/screens/allergies.js?v=10"></script>
+<script src="js/screens/documents.js?v=10"></script>
+<script src="js/screens/reports.js?v=10"></script>
+<script src="js/screens/devices.js?v=10"></script>
+<script src="js/screens/careteam.js?v=10"></script>
+<script src="js/screens/complications.js?v=10"></script>
+<script src="js/screens/caregaps.js?v=10"></script>
+<script src="js/screens/settings.js?v=10"></script>
+<script src="js/app.js?v=10"></script>
+</body>
+</html>
